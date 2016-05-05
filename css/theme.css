@@ -1,0 +1,34 @@
+.navbar-brand .logo {
+    height: 45px;
+    margin-top: -13px;
+}
+
+#q-typ-budovy img {
+    width: 100px;
+}
+
+.list-inline li {
+    padding: 50px;
+    min-width: 200px;
+}
+
+.section-content {
+    min-height: 300px;
+}
+
+.selectable-group li {
+    cursor: pointer;
+}
+
+.selectable-group li:hover {
+    background: #efefef;
+}
+
+.selectable-group li.active {
+    border: thin dashed teal;
+    background: #cdcdcd;
+}
+
+.next-btn {
+    display: none;
+}
