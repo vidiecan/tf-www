@@ -151,7 +151,7 @@ $(function() {
         
         
         $("#result").html(html);
-        graph("chart2", values);
+        graph("chart", values);
     }
 
     $('.selectable-group li').click(function(e) {
