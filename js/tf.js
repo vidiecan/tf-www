@@ -9,7 +9,8 @@ $(function() {
             trvanie_zamerania_min: 0.5,
             cena_pristroja: 0.0,
             travenie_modelu: 0.04,
-            cena_modelu_hod: 20
+            cena_modelu_hod: 20,
+            magic_koef: 1.3
         },
         ultra: {
             name: 'Ultrazvukový diaľkomer',
@@ -19,7 +20,8 @@ $(function() {
             trvanie_zamerania_min: 0.278,
             cena_pristroja: 0.0,
             travenie_modelu: 0.04,
-            cena_modelu_hod: 20
+            cena_modelu_hod: 20,
+            magic_koef: 1.2
         },
         sken: {
             name: 'Laserový skener',
@@ -29,7 +31,8 @@ $(function() {
             trvanie_zamerania_min: 0.639,
             cena_pristroja: 0.467,
             travenie_modelu: 0.035,
-            cena_modelu_hod: 20
+            cena_modelu_hod: 20,
+            magic_koef: 1.0
         },
         mob: {
             name: "Mobilná aplikácia",
@@ -39,7 +42,8 @@ $(function() {
             trvanie_zamerania_min: 0.694,
             cena_pristroja: 0.008,
             travenie_modelu: 0.007,
-            cena_modelu_hod: 20
+            cena_modelu_hod: 20,
+            magic_koef: 1.1
         }
         
     };
@@ -59,14 +63,16 @@ $(function() {
             return Math.round(i * 1000) / 1000;
         }
         
-        function row(values, name, param, m2, diff, model_diff) {
+        function display_one_row(values, name, param, m2, cena_koef, zlozitost_koef, model_koef, magic_koef) {
             var cena_pripravy = param.min_ludi * param.plat * (param.priprava_merania_min / 60.) * m2;
-            cena_pripravy *= diff;
             var cena_merania = param.min_ludi * param.plat * (param.trvanie_zamerania_min / 60.) * m2;
             var cena_pristrojov = (param.trvanie_zamerania_min / 60.) * param.cena_pristroja;
+            
             var cena_modelovania = param.travenie_modelu * m2 * param.cena_modelu_hod;
-            cena_modelovania *= model_diff;
             var suma = cena_pripravy + cena_merania + cena_pristrojov + cena_modelovania;
+            
+            suma = suma * cena_koef * zlozitost_koef * model_koef * param.magic_koef;
+            
             values.push([name, suma]);
             var h = "";
             h += "<tr>";
@@ -80,9 +86,9 @@ $(function() {
             return h;
         }
         
-        function header(m2, diff, model_diff) {
+        function header(m2, cena_koef, zlozitost_koef, model_koef) {
             var html = '<div class="well">';
-            html += "<h2>" + m2.toString() + "m<sup>2</sup> | diff=" + diff + " | model diff=" + model_diff + "</h2>"; 
+            html += "<h2>" + m2.toString() + "m<sup>2</sup> | cena koef=" + cena_koef + " | zlozitost koef=" + zlozitost_koef + " | model koef=" + model_koef + "</h2>"; 
             html += '<table class="table table-striped table-generated-results">';
             html += '<thead><tr>';
             html += '<th>Spôsob zameriavania</th>';
@@ -128,25 +134,43 @@ $(function() {
         
         var html = "";
         var m2 = 1;
-        var diff = 1.0;
-        var model_diff = 1.0;
-        html += header(m2, diff, model_diff);
+        var cena_koef  = 1.0;
+        var zlozitost_koef  = 1.0;
+        var model_koef = 1.0;
+        html += header(m2, cena_koef, zlozitost_koef, model_koef);
         var values = [];
-        html += row(values, params.ruco.name, params.ruco, m2, diff, model_diff);
-        html += row(values, params.ultra.name, params.ultra, m2, diff, model_diff);
-        html += row(values, params.sken.name, params.sken, m2, diff, model_diff);
-        html += row(values, params.mob.name, params.mob, m2, diff, model_diff);
+        html += display_one_row(
+            values, params.ruco.name, params.ruco, m2, cena_koef, zlozitost_koef, model_koef
+        );
+        html += display_one_row(
+            values, params.ultra.name, params.ultra, m2, cena_koef, zlozitost_koef, model_koef
+        );
+        html += display_one_row(
+            values, params.sken.name, params.sken, m2, cena_koef, zlozitost_koef, model_koef
+        );
+        html += display_one_row(
+            values, params.mob.name, params.mob, m2, cena_koef, zlozitost_koef, model_koef
+        );
         html += footer();
         
-        m2 = parseInt($("#q-vymera-value").val());
-        diff = parseInt(get_selected_data_target("#q2"));
-        model_diff = parseInt(get_selected_data_target("#q5"));
-        html += header(m2, diff, model_diff);
+        m2 = parseFloat($("#q-vymera-value").val());
+        cena_koef = parseFloat(get_selected_data_target("#q2"));
+        zlozitost_koef = parseFloat(get_selected_data_target("#q4"));
+        model_koef = parseFloat(get_selected_data_target("#q5"));
+        html += header(m2, cena_koef, zlozitost_koef, model_koef);
         var values = [];
-        html += row(values, params.ruco.name, params.ruco, m2, diff, model_diff);
-        html += row(values, params.ultra.name, params.ultra, m2, diff, model_diff);
-        html += row(values, params.sken.name, params.sken, m2, diff, model_diff);
-        html += row(values, params.mob.name, params.mob, m2, diff, model_diff);
+        html += display_one_row(
+            values, params.ruco.name, params.ruco, m2, cena_koef, zlozitost_koef, model_koef
+        );
+        html += display_one_row(
+            values, params.ultra.name, params.ultra, m2, cena_koef, zlozitost_koef, model_koef
+        );
+        html += display_one_row(
+            values, params.sken.name, params.sken, m2, cena_koef, zlozitost_koef, model_koef
+        );
+        html += display_one_row(
+            values, params.mob.name, params.mob, m2, cena_koef, zlozitost_koef, model_koef
+        );
         html += footer();
         
         
