@@ -137,22 +137,24 @@ $(function() {
         var cena_koef  = 1.0;
         var zlozitost_koef  = 1.0;
         var model_koef = 1.0;
-        html += header(m2, cena_koef, zlozitost_koef, model_koef);
-        var values = [];
-        html += display_one_row(
-            values, params.ruco.name, params.ruco, m2, cena_koef, zlozitost_koef, model_koef
-        );
-        html += display_one_row(
-            values, params.ultra.name, params.ultra, m2, cena_koef, zlozitost_koef, model_koef
-        );
-        html += display_one_row(
-            values, params.sken.name, params.sken, m2, cena_koef, zlozitost_koef, model_koef
-        );
-        html += display_one_row(
-            values, params.mob.name, params.mob, m2, cena_koef, zlozitost_koef, model_koef
-        );
-        html += footer();
-        
+        var show_baseline = false;
+        if (show_baseline) {
+            html += header(m2, cena_koef, zlozitost_koef, model_koef);
+            var values = [];
+            html += display_one_row(
+                values, params.ruco.name, params.ruco, m2, cena_koef, zlozitost_koef, model_koef
+            );
+            html += display_one_row(
+                values, params.ultra.name, params.ultra, m2, cena_koef, zlozitost_koef, model_koef
+            );
+            html += display_one_row(
+                values, params.sken.name, params.sken, m2, cena_koef, zlozitost_koef, model_koef
+            );
+            html += display_one_row(
+                values, params.mob.name, params.mob, m2, cena_koef, zlozitost_koef, model_koef
+            );
+            html += footer();
+        }
         m2 = parseFloat($("#q-vymera-value").val());
         cena_koef = parseFloat(get_selected_data_target("#q2"));
         zlozitost_koef = parseFloat(get_selected_data_target("#q4"));
