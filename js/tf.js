@@ -1,6 +1,8 @@
 $(function() {
     
     var params = {
+        m2_magic_bulhar_over_1000: 0.75, 
+        
         ruco: {
             name: 'Ručné zameranie',
             min_ludi: 2,
@@ -156,6 +158,10 @@ $(function() {
             html += footer();
         }
         m2 = parseFloat($("#q-vymera-value").val());
+        if (1000. < m2) {
+            m2 = params.m2_magic_bulhar_over_1000 * m2;
+        }
+        
         cena_koef = parseFloat(get_selected_data_target("#q2"));
         zlozitost_koef = parseFloat(get_selected_data_target("#q4"));
         model_koef = parseFloat(get_selected_data_target("#q5"));
